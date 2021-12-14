@@ -5,16 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+    <title>svg缩放移动dome</title>
 </head>
 
 <body>
-    <div id="canvas" style="width: 1000px; height: 800px; border-style: solid; border-width: 1px; border-color: red;">
-        <!-- <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1"
-            viewBox="0 0 190 242" height="242px" width="190px" style="border-style: solid; border-width: 1px;"> -->
+    <div id="canvas" style="width: 1000px; height: 1000px; border-style: solid; border-width: 1px; border-color: red;">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1"
-            viewBox="0 0 190 242" height="100%" width="100%" style="border-style: solid; border-width: 1px;">
+            data-width="190" data-height="242" height="100%" width="100%">
 
             <g fill-rule="evenodd" fill="none" stroke-width="1" stroke="none" id="Page-1">
                 <g transform="translate(1.000000, 2.000000)" id="Saint副本">
@@ -147,15 +144,27 @@
         </svg>
     </div>
     <script>
-        let canvas = document.querySelector('#canvas');
         let svg = document.querySelector('svg');
+        //获取svg的宽高数据
+        let svg_width = parseInt(svg.dataset.width);
+        let svg_height = parseInt(svg.dataset.height);
+        let svg_show_w = svg.clientWidth;
+        let svg_show_h = svg.clientHeight;
+        //获取svg下的第一个g标签
         let g = document.querySelector('svg g');
-        let scale = 1.0;
-        let offset_x = 0;
-        let offset_y = 0;
+        // 计算合适的缩放比例(宽和高的比例中小的那个)
+        let scale = Math.min((svg_show_h - 50) / svg_height, (svg_show_w - 50) / svg_width);
+        //计算偏移量让svg居中((画布大小-缩放后的图像大小)/2)
+        let offset_x = (svg_show_w - scale * svg_width) / 2;
+        let offset_y = (svg_show_h - scale * svg_height) / 2;
+        //设置可否移动标志
         let move_flag = false;
-        svg.style.transformOrigin = "0 0 0";
-        svg.style.transform = `scale3d(${scale}, ${scale}, 1.0)`;
+        //设置变换参考点
+        g.style.transformOrigin = "0 0 0";
+        //设置偏移和缩放
+        g.style.transform = `translate3d(${offset_x}px, ${offset_y}px, 0) scale3d(${scale}, ${scale}, 1.0)`;
+        // TODO:需要做鼠标移出画布监测
+        // svg鼠标按下事件
         svg.onmousedown = (e) => {
             move_flag = true;
             let r_x = (e.offsetX - offset_x) / scale;
@@ -164,8 +173,10 @@
             let click_y = e.offsetY;
             let last_ox = offset_x;
             let last_oy = offset_y;
+            // svg鼠标移动事件(可移出onmousedown方法外,注意变量)
             svg.onmousemove = (e) => {
                 if (!move_flag) return;
+                console.log(e);
                 let x = e.offsetX;
                 let y = e.offsetY;
                 offset_x = last_ox + (x - click_x);
@@ -173,9 +184,11 @@
                 g.style.transform = `translate3d(${offset_x}px, ${offset_y}px, 0) scale3d(${scale}, ${scale}, 1.0)`;
             }
         }
+        // svg鼠标抬起事件
         svg.onmouseup = (e) => {
             move_flag = false;
         }
+        // svg鼠标滚轮事件
         svg.onmousewheel = (e) => {
             let r_x = (e.offsetX - offset_x) / scale;
             let r_y = (e.offsetY - offset_y) / scale;
