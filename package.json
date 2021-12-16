@@ -10,6 +10,9 @@
   "dependencies": {
     "@octokit/core": "^3.5.1",
     "core-js": "^3.6.5",
+    "node-sass": "^7.0.0",
+    "sass": "^1.45.0",
+    "sass-loader": "^10.1.1",
     "vue": "^3.0.0"
   },
   "devDependencies": {
