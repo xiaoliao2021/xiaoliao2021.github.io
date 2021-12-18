@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import { decryptAES } from "../utils";
+import { decryptAES } from "@utils/tools";
 const dataAES = {
   read_only_ciphertext:
     "nbrQ3EO7u+6g8SWPc6X5NTZvS5kccFvGnaYlO9hzGpyzIUUJhc7dzmJcOQtFDd8+", //只读令牌密文

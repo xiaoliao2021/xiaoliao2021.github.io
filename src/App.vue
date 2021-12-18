@@ -21,8 +21,10 @@ export default {
     this.init_github_config();
   },
   setup() {
+    const obj = ['tom', 18, 'male']
     return {
       github,
+      obj
     };
   },
   methods: {

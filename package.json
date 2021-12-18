@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@octokit/core": "^3.5.1",
+    "ant-design-vue": "^2.2.8",
     "core-js": "^3.6.5",
     "crypto-js": "^4.1.1",
     "node-sass": "^7.0.0",
