@@ -8,30 +8,36 @@
 /* eslint-disable */
 import { github } from "./hooks/config";
 import { Octokit } from "@octokit/core";
-const octokit = new Octokit({
-  auth: github.read_only_auth,
-});
+import { createTokenAuth } from "@octokit/auth-token";
+// import { encryptAES, decryptAES } from "./utils";
+const read_octokit = new Octokit();
+// const deployment_octokit = new Octokit();
+
 export default {
   name: "App",
   components: {},
   mounted() {
+    this.octokitSetToken(read_octokit, github.read_only_auth);
     this.init_github_config();
   },
   setup() {
-    return{
-      github
-    }
+    return {
+      github,
+    };
   },
   methods: {
+    octokitSetToken(octokit, token) {
+      const auth = createTokenAuth(token);
+      octokit.hook.wrap("request", auth.hook);
+      octokit.auth = auth;
+    },
     async init_github_config() {
-      const {
-        data: { login },
-      } = await octokit.request("GET /user");
-      github.login = login;
+      const data = await read_octokit.request("GET /user");
+      github.login = data.data.login;
       this.get_note_category();
     },
     async get_note_category() {
-      const data = await octokit.request(
+      const data = await read_octokit.request(
         "GET /repos/{owner}/{repo}/contents/{path}",
         {
           owner: github.login,
@@ -102,7 +108,7 @@ export default {
       return root_node;
     },
     async get_dir_tree(tree_sha) {
-      const data = await octokit.request(
+      const data = await read_octokit.request(
         "GET /repos/{owner}/{repo}/git/trees/{tree_sha}",
         {
           owner: github.login,
