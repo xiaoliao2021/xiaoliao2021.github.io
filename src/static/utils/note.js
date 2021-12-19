@@ -4,7 +4,7 @@ const github_config = {};
 
 function getTree(res_data, callback) {
   res_data.forEach((item) => {
-    if (item.type == "dir" && item.name == github_config.note_root_path) {
+    if (item.type === "dir" && item.name === github_config.note_root_path) {
       github.getTree(
         github_config.login,
         github_config.repo,
@@ -15,6 +15,29 @@ function getTree(res_data, callback) {
             callback({
               code: 200,
               data: createTree(res.data),
+            });
+          } else {
+            console.log(res);
+            callback(res);
+          }
+        }
+      );
+    }
+    if (item.type === "file" && item.name === "catalogue_map.json") {
+      github.getContent(
+        github_config.login,
+        github_config.repo,
+        github_config.branch,
+        item.sha,
+        (res) => {
+          if (res.code === 200) {
+            callback({
+              code: 201,
+              data: {
+                catalogue_map: JSON.parse(
+                  Buffer.from(res.data.content, "base64").toString("utf8")
+                ),
+              },
             });
           } else {
             console.log(res);

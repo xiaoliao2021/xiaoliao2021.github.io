@@ -102,6 +102,39 @@ async function getTree_(login, repo, branch, sha) {
   }
   return response_data;
 }
+
+async function getContent_(login, repo, branch, sha) {
+  /**
+   * @see https://docs.github.com/cn/rest/reference/git#get-a-blob
+   */
+  let response_data = { code: -1, data: "error" };
+  try {
+    const response = await octokit_.request(
+      "GET /repos/{owner}/{repo}/git/blobs/{file_sha}",
+      {
+        owner: login,
+        repo: repo,
+        file_sha: sha,
+        ref: branch,
+      }
+    );
+    response_data.code = response.status;
+    response_data.data = response.data;
+  } catch (error) {
+    const errorStr = error.toString();
+    if (
+      errorStr.indexOf("Not Found") != -1 ||
+      errorStr.indexOf("No commit found for the ref") != -1
+    ) {
+      response_data.code = 404;
+      response_data.data = "Not Found";
+    } else {
+      response_data.code = 405;
+      response_data.data = "error network";
+    }
+  }
+  return response_data;
+}
 export default {
   setToken(token) {
     if (token_ === token) return;
@@ -121,5 +154,9 @@ export default {
 
   async getTree(login, repo, branch, sha, callback) {
     return callback(await getTree_(login, repo, branch, sha));
+  },
+
+  async getContent(login, repo, branch, sha, callback) {
+    return callback(await getContent_(login, repo, branch, sha));
   },
 };

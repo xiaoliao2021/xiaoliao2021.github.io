@@ -19,7 +19,7 @@ export default {
     Object.keys(github_config).forEach((key) => {
       note.setGitHubConfig(key, github_config[key]);
     });
-    const noteTree = reactive({ children: [] });
+    const noteTree = reactive({ children: [], catalogue_map: {} });
     const userMsg = reactive({
       avatar_url: null,
       bio: null,
@@ -52,7 +52,10 @@ export default {
         Object.keys(res_data.root_catalogue).forEach((key) => {
           this.noteTree[key] = res_data.root_catalogue[key];
         });
-        console.log(res_data);
+      }else if(res.code === 201){
+          Object.keys(res_data).forEach((key) => {
+          this.noteTree[key] = res_data[key];
+        });
       } else {
         console.log(res);
       }

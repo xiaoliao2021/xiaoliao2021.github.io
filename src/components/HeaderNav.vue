@@ -5,7 +5,7 @@
         <a-menu-item>首页</a-menu-item>
         <a-sub-menu>
           <template #title>分类</template>
-          <template v-for="item in noteTree.children" :key="item.name">
+          <template v-for="item in catalogue.children" :key="item.name">
             <template v-if="!item.children || item.children.length === 0">
               <a-menu-item :key="item.name">
                 {{ item.name }}
@@ -34,16 +34,34 @@ export default {
   },
   setup() {
     const noteTree = inject("noteTree");
-    watch(
-      noteTree,
-      (val) => {
-        console.log("note>>", val);
-      },
-      {
-        deep: true,
-      }
-    );
+    // watch(
+    //   noteTree,
+    //   (val) => {
+    //     console.log("note>>", val);
+    //   },
+    //   {
+    //     deep: true,
+    //   }
+    // );
     return { noteTree };
+  },
+  methods: {
+    dfs(item, map) {
+      if (!item || !map) return;
+      item.name = map[item.name] ? map[item.name] : item.name;
+      if (item.children && item.children.length > 0) {
+        item.children.forEach((i) => {
+          this.dfs(i, map);
+        });
+      }
+    },
+  },
+  computed: {
+    catalogue: function () {
+      const obj = JSON.parse(JSON.stringify(this.noteTree));
+      this.dfs(obj, this.noteTree.catalogue_map);
+      return obj;
+    },
   },
 };
 </script>

@@ -19,7 +19,6 @@ export default {
     HeaderNav
   },
   setup() {
-    console.log('hi');
     const timeNow = ref(null)
     const getTime = function () {
       const now = Date.parse(new Date())
