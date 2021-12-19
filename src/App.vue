@@ -1,7 +1,5 @@
 <template>
-  <svg viewBox="0 0 400 200">
-    <text x="-20%" y="50%">{{ github.repo }}</text>
-  </svg>
+  <Header />
 </template>
 
 <script>
@@ -9,23 +7,24 @@
 import { github } from "./hooks/config";
 import { Octokit } from "@octokit/core";
 import { createTokenAuth } from "@octokit/auth-token";
+import Header from "@components/Header.vue"
 // import { encryptAES, decryptAES } from "./utils";
 const read_octokit = new Octokit();
 // const deployment_octokit = new Octokit();
 
 export default {
   name: "App",
-  components: {},
+  components: {
+    Header
+  },
+  setup() {
+    return {
+      github,
+    };
+  },
   mounted() {
     this.octokitSetToken(read_octokit, github.read_only_auth);
     this.init_github_config();
-  },
-  setup() {
-    const obj = ['tom', 18, 'male']
-    return {
-      github,
-      obj
-    };
   },
   methods: {
     octokitSetToken(octokit, token) {
@@ -122,18 +121,16 @@ export default {
       );
       const root_node = this.create_directory_tree(data.data);
       console.log(root_node);
-    },
+    }
   },
 };
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Bangers&family=Homemade+Apple&family=Sacramento&display=swap");
 
 #app,
 body,
 html {
-  font-family: "Bangers", cursive;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
@@ -144,53 +141,7 @@ html {
 
 #app {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: black;
-  font-family: "Bangers", cursive;
+  flex-direction: column;
 }
 
-.hello-text {
-  border: 1px solid black;
-}
-
-svg {
-  width: 100%;
-  height: 300px;
-  margin: auto;
-}
-
-svg text {
-  text-transform: uppercase;
-  animation: stroke 5s infinite alternate;
-  letter-spacing: 10px;
-  font-size: 100px;
-}
-@keyframes stroke {
-  0% {
-    fill: rgba(72, 138, 20, 0);
-    stroke: rgba(54, 95, 160, 1);
-    stroke-dashoffset: 25%;
-    stroke-dasharray: 0 50%;
-    stroke-width: 0.2;
-  }
-  50% {
-    fill: rgba(72, 138, 20, 0);
-    stroke: rgba(54, 95, 160, 1);
-    stroke-width: 0.5;
-  }
-  70% {
-    fill: rgba(72, 138, 20, 0);
-    stroke: rgba(54, 95, 160, 1);
-    stroke-width: 1;
-  }
-  90%,
-  100% {
-    fill: rgba(72, 138, 204, 1);
-    stroke: rgba(54, 95, 160, 0);
-    stroke-dashoffset: -25%;
-    stroke-dasharray: 50% 0;
-    stroke-width: 0;
-  }
-}
 </style>
