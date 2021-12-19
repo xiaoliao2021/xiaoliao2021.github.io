@@ -4,11 +4,11 @@
 
 <script>
 /* eslint-disable */
-import {github_config} from "./hooks/config.js";
+import { github_config } from "./hooks/config.js";
 import github from "@utils/github.js";
 import Header from "@components/Header.vue";
 import note from "@utils/note";
-import { reactive } from "vue";
+import { reactive, provide } from "vue";
 
 export default {
   name: "App",
@@ -19,15 +19,18 @@ export default {
     Object.keys(github_config).forEach((key) => {
       note.setGitHubConfig(key, github_config[key]);
     });
+    const noteTree = reactive({ children: [] });
+    const userMsg = reactive({
+      avatar_url: null,
+      bio: null,
+      company: null,
+      name: null,
+      url: null,
+    });
+    provide("noteTree", noteTree);
     return reactive({
-      noteTree: null,
-      userMsg: {
-        avatar_url: null,
-        bio: null,
-        company: null,
-        name: null,
-        url: null,
-      },
+      noteTree,
+      userMsg,
     });
   },
   mounted() {
@@ -46,7 +49,11 @@ export default {
     note.getCatalogue((res) => {
       const res_data = res.data;
       if (res.code === 200) {
-        this.noteTree = res_data;
+        // this.noteTree = res_data;
+        Object.keys(res_data).forEach((key) => {
+          this.noteTree[key] = res_data[key];
+        });
+        console.log(res_data);
       } else {
         console.log(res);
       }

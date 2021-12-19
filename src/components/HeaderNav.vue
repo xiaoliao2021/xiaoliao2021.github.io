@@ -3,7 +3,12 @@
     <div class="menu-wrapper">
       <a-menu mode="horizontal">
         <a-menu-item>首页</a-menu-item>
-        <a-menu-item>分类</a-menu-item>
+        <a-sub-menu>
+          <template #title>分类</template>
+          <a-menu-item v-for="item in noteTree.children" :key="item.name">{{
+            item.name
+          }}</a-menu-item>
+        </a-sub-menu>
         <a-menu-item>留言板</a-menu-item>
         <a-menu-item>关于</a-menu-item>
       </a-menu>
@@ -12,17 +17,28 @@
 </template>
 
 <script>
-import { reactive } from "vue"
+import { inject, reactive, watch } from "vue";
 export default {
-  name: 'HeaderNav',
+  name: "HeaderNav",
   setup() {
-  }
-}
+    const noteTree = inject("noteTree");
+    watch(
+      noteTree,
+      (val) => {
+        console.log("note>>", val);
+      },
+      {
+        deep: true,
+      }
+    );
+    return { noteTree };
+  },
+};
 </script>
 
 <style lang="scss">
 .top-nav {
-  width:100%;
+  width: 100%;
   height: 50px;
   position: absolute;
   z-index: 5;
