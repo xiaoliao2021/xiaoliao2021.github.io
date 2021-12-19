@@ -1,13 +1,20 @@
 <template>
   <div class="top-nav">
     <div class="menu-wrapper">
-      <a-menu mode="horizontal">
+      <a-menu mode="horizontal" theme="dark">
         <a-menu-item>首页</a-menu-item>
         <a-sub-menu>
           <template #title>分类</template>
-          <a-menu-item v-for="item in noteTree.children" :key="item.name">{{
-            item.name
-          }}</a-menu-item>
+          <template v-for="item in noteTree.children" :key="item.name">
+            <template v-if="!item.children || item.children.length === 0">
+              <a-menu-item :key="item.name">
+                {{ item.name }}
+              </a-menu-item>
+            </template>
+            <template v-else>
+              <sub-menu :menu-info="item" :key="item.name" />
+            </template>
+          </template>
         </a-sub-menu>
         <a-menu-item>留言板</a-menu-item>
         <a-menu-item>关于</a-menu-item>
@@ -18,8 +25,13 @@
 
 <script>
 import { inject, reactive, watch } from "vue";
+import SubMenu from "./SubMenu.vue";
+
 export default {
   name: "HeaderNav",
+  components: {
+    "sub-menu": SubMenu,
+  },
   setup() {
     const noteTree = inject("noteTree");
     watch(

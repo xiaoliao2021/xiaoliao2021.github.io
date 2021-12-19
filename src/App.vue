@@ -49,9 +49,8 @@ export default {
     note.getCatalogue((res) => {
       const res_data = res.data;
       if (res.code === 200) {
-        // this.noteTree = res_data;
-        Object.keys(res_data).forEach((key) => {
-          this.noteTree[key] = res_data[key];
+        Object.keys(res_data.root_catalogue).forEach((key) => {
+          this.noteTree[key] = res_data.root_catalogue[key];
         });
         console.log(res_data);
       } else {

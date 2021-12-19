@@ -28,13 +28,21 @@ function getTree(res_data, callback) {
 function createTree(obj) {
   let trees = obj.tree;
   let tree_map = {};
+  let catalogue_map = {};
   let root_node = {
     name: github_config.note_root_path,
     path: github_config.note_root_path,
     sha: obj.sha,
     children: [],
   };
+  let root_catalogue = {
+    name: github_config.note_root_path,
+    path: github_config.note_root_path,
+    sha: obj.sha,
+    children: [],
+  };
   tree_map[github_config.note_root_path] = root_node;
+  catalogue_map[github_config.note_root_path] = root_catalogue;
   trees.forEach((item) => {
     let { path, sha, type } = item;
     // 跳过忽视文件
@@ -47,6 +55,12 @@ function createTree(obj) {
       sha: sha,
       children: "tree" === type ? [] : undefined,
     };
+    let new_catalogue = {
+      name: path_split[path_split.length - 1],
+      path: `${github_config.note_root_path}/${path}`,
+      sha: sha,
+      children: "tree" === type ? [] : undefined,
+    };
     //找最后一个"/"的索引
     let index = path.lastIndexOf("/");
     // 获取父节点的key
@@ -54,8 +68,12 @@ function createTree(obj) {
       index === -1 ? github_config.note_root_path : path.substr(0, index);
     tree_map[pre_key].children.push(new_node); //父节点添加当前节点
     tree_map[path] = new_node; //存入当前节点
+    if ("tree" === type) {
+      catalogue_map[pre_key].children.push(new_catalogue); //父节点添加当前节点
+      catalogue_map[path] = new_catalogue; //存入当前节点
+    }
   });
-  return root_node;
+  return { root_node, root_catalogue };
 }
 export default {
   setGitHubConfig(k, v) {
