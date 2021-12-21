@@ -4,7 +4,8 @@ import {
   Button,
   Switch,
   Menu,
-  MenuItem
+  MenuItem,
+  Cascader
 } from 'ant-design-vue'
 
 export {
@@ -21,5 +22,6 @@ const Elements = {
   Button,
   Switch,
   Menu,
-  MenuItem
+  MenuItem,
+  Cascader
 }

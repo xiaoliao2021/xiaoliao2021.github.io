@@ -120,4 +120,25 @@ export default {
       }
     );
   },
+  async getContent(sha, callback) {
+    github.getContent(
+      github_config.login,
+      github_config.repo,
+      github_config.branch,
+      sha,
+      (res) => {
+        if (res.code === 200) {
+          callback({
+            code: 200,
+            data: {
+              content: Buffer.from(res.data.content, "base64").toString("utf8"),
+            },
+          });
+        } else {
+          console.log(res);
+          callback(res);
+        }
+      }
+    );
+  },
 };
