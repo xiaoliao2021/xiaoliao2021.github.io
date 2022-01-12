@@ -8,6 +8,10 @@
       <p id="clock">{{timeNow?.[1]}}</p>
       <p id="date">{{timeNow?.[0]}}</p>
     </div>
+    <div class="user-info">
+      <a-avatar :src="avatar" :size="100"/>
+      <span>{{ bio }}</span>
+    </div>
   </div>
 </template>
 
@@ -17,6 +21,16 @@ import HeaderNav from '@components/HeaderNav.vue'
 export default {
   components:{
     HeaderNav
+  },
+  props: {
+    avatar: {
+      type: String,
+      default: ""
+    },
+    bio: {
+      type: String,
+      default: "Nothing"
+    }
   },
   setup() {
     const timeNow = ref(null)
@@ -44,10 +58,12 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Bangers&family=Homemade+Apple&family=Sacramento&display=swap");
 
 .top-bg {
-  height: 650px;
+  height: 500px;
   width: 100%;
   position: relative;
   background-image: url("../assets/bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 
   .spidersOne {
     position: absolute;
@@ -78,9 +94,26 @@ export default {
     font-size: 50px;
     line-height: 5px;
     position: absolute;
-    top: 500px;
+    bottom: 10px;
     right: 50px;
     color: white;
+  }
+  .user-info {
+    width: 50%;
+    height: 140px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px 5px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    span {
+      margin-top: 5px;
+    }
   }
   @keyframes animStar {
     from {
