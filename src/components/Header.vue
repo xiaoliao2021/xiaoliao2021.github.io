@@ -9,7 +9,7 @@
       <p id="date">{{timeNow?.[0]}}</p>
     </div>
     <div class="user-info">
-      <a-avatar :src="avatar" :size="100"/>
+      <a-avatar :src="avatar" :size="100" class="avatar"/>
       <span>{{ bio }}</span>
     </div>
   </div>
@@ -100,19 +100,25 @@ export default {
   }
   .user-info {
     width: 50%;
+    min-width: 300px;
     height: 140px;
     position: absolute;
-    bottom: 0;
+    bottom: -30px;
     left: 50%;
     transform: translateX(-50%);
     background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 5px 5px 0 0;
+    border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     span {
       margin-top: 5px;
+    }
+    .avatar {
+      &:hover {
+        animation: rotate-center 0.6s ease-in-out both;
+      }
     }
   }
   @keyframes animStar {
@@ -121,6 +127,16 @@ export default {
     }
     to {
       transform: translate(-2000px,-2000px);
+    }
+  }
+  @keyframes rotate-center {
+    0% {
+      -webkit-transform: rotate(0);
+              transform: rotate(0);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+              transform: rotate(360deg);
     }
   }
 }

@@ -1,6 +1,7 @@
 const state = {
     userConfig: {},
-    noteTree: {}
+    catalogueTree: {},
+    filesTree:{}
 }
 
 export default state

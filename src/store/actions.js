@@ -13,7 +13,7 @@ const getCatalogue = ({ state, commit }) => {
         const resData = res.data
         if(res.code === 200) {
             console.log('this>>',resData)
-            commit('setCatalogue', resData.root_catalogue)
+            commit('setCatalogue', resData)
         } else if (res.code === 201) {
             commit('setCatalogue', resData)
         } else {
@@ -22,7 +22,17 @@ const getCatalogue = ({ state, commit }) => {
     })
 }
 
+const getFileContent = ({ state, commit }, sha) => {
+    note.getContent(sha, res => {
+        const resData = res.data
+        if(res.code === 200) {
+            console.log('hi', resData)
+        }
+    })
+}
+
 export default {
     getUserInfo,
-    getCatalogue
+    getCatalogue,
+    getFileContent
 }

@@ -24,26 +24,26 @@
 </template>
 
 <script>
-import { inject, reactive, watch } from "vue";
+import { inject, reactive, watch, ref } from "vue";
 import SubMenu from "./SubMenu.vue";
-
+import {
+  MailOutlined,
+  AppstoreOutlined,
+  SettingOutlined,
+} from "@ant-design/icons-vue";
 export default {
   name: "HeaderNav",
   components: {
     "sub-menu": SubMenu,
+    MailOutlined,
+    AppstoreOutlined,
+    SettingOutlined,
   },
+
   setup() {
     const noteTree = inject("noteTree");
-    // watch(
-    //   noteTree,
-    //   (val) => {
-    //     console.log("note>>", val);
-    //   },
-    //   {
-    //     deep: true,
-    //   }
-    // );
-    return { noteTree };
+    const current = ref(["mail"]);
+    return { noteTree, current };
   },
   methods: {
     dfs(item, map) {
@@ -75,9 +75,9 @@ export default {
 }
 
 .menu-wrapper {
-  display: flex;
-  justify-content: center;
+  margin: 0 auto !important;
   .ant-menu {
+    justify-content: center;
     margin: 0 auto !important;
     background: rgba(40, 42, 44, 0.6) !important;
     color: white !important;
