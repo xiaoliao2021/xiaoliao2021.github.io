@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import { inject, reactive, watch, ref } from "vue";
+import { inject, reactive, watch, ref, computed } from "vue";
+import store from "../store/index";
 import SubMenu from "./SubMenu.vue";
 import {
   MailOutlined,
@@ -41,9 +42,12 @@ export default {
   },
 
   setup() {
-    const noteTree = inject("noteTree");
+    const noteTree = computed(() => store.state.catalogueTree);
     const current = ref(["mail"]);
     return { noteTree, current };
+  },
+  mounted(){
+    console.log(this.noteTree);
   },
   methods: {
     dfs(item, map) {
@@ -60,6 +64,7 @@ export default {
     catalogue: function () {
       const obj = JSON.parse(JSON.stringify(this.noteTree));
       this.dfs(obj, this.noteTree.catalogue_map);
+      console.log(this.noteTree);
       return obj;
     },
   },

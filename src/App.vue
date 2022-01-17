@@ -17,14 +17,6 @@
       <a-button type="primary">Hello</a-button>
     </div>
   </div>
-  <!-- <div class="t1">
-    <div>
-      <div class="t2" v-for="i in 50" :key="i">{{ i }}</div>
-    </div>
-    <div class="t3">
-      <button>test</button>
-    </div>
-  </div> -->
 </template>
 
 <script>
@@ -46,13 +38,13 @@ export default {
       note.setGitHubConfig(key, github_config[key]);
     });
 
-    const noteTree = computed(() => store.state.catalogueTree);
+    // const noteTree = computed(() => store.state.catalogueTree);
     const userMsg = computed(() => store.state.userConfig);
 
     const text = ` 一、对于第三方js库的优化，分离打包       生产环境是内网的话，就把资源放内网，通过静态文件引入，会比node_modules和外网CDN的打包加载快很多。如果有外网的话，可以通过CDN方式引入，因为不用占用访问外网的带宽，不仅可以为您节省流量，还能通过CDN加速，获得更快的访问速度。但是要注意下，如果你引用的CDN 资源存在于第三方服务器，在安全性上并不完全可控。        目前采用引入依赖包生产环境的js文件方式加载，直接通过window可以访问暴露出的全局变量，不必通过import引入，Vue.use去注册        在webpack的dev开发配置文件中, 加入如下参数，可以分离打包第三方资源包，key为依赖包名称，value是源码抛出来的全局变量。如下图所示，可以看到打包后vue相关资源包已经排除在外了。对于一些其他的工具库，尽量采用按需引入的方式。`;
-    provide("noteTree", noteTree);
+    // provide("noteTree", noteTree);
     return reactive({
-      noteTree,
+      // noteTree,
       userMsg,
       text,
     });

@@ -12,10 +12,11 @@ const getCatalogue = ({ state, commit }) => {
     note.getCatalogue(res => {
         const resData = res.data
         if(res.code === 200) {
-            console.log('this>>',resData)
+            // console.log('this>>',resData)
             commit('setCatalogue', resData)
         } else if (res.code === 201) {
             commit('setCatalogue', resData)
+            // console.log('this>>',resData)
         } else {
             console.error(res)
         }
