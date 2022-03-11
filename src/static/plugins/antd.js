@@ -6,7 +6,8 @@ import {
   Menu,
   MenuItem,
   Cascader,
-  Avatar
+  Avatar,
+  Tabs
 } from 'ant-design-vue'
 
 export {
@@ -25,5 +26,6 @@ const Elements = {
   Menu,
   MenuItem,
   Cascader,
-  Avatar
+  Avatar,
+  Tabs
 }

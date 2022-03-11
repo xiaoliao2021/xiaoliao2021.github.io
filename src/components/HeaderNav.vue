@@ -18,7 +18,7 @@
         </a-sub-menu>
         <a-menu-item key="message">留言板</a-menu-item>
         <a-menu-item key="about">关于</a-menu-item>
-        <a-menu-item key="admin" @click="handleClick">后台管理</a-menu-item>
+        <a-menu-item key="admin" @click="handleClickAdmin">后台管理</a-menu-item>
       </a-menu>
     </div>
   </div>
@@ -60,7 +60,7 @@ export default {
         });
       }
     },
-    handleClick(e){
+    handleClickAdmin(e){
       console.log(e);
     }
   },
