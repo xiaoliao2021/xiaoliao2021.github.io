@@ -2,7 +2,7 @@
   <div class="top-nav">
     <div class="menu-wrapper">
       <a-menu mode="horizontal" theme="dark">
-        <a-menu-item>首页</a-menu-item>
+        <a-menu-item key="index">首页</a-menu-item>
         <a-sub-menu>
           <template #title>分类</template>
           <template v-for="item in catalogue.children" :key="item.name">
@@ -16,8 +16,9 @@
             </template>
           </template>
         </a-sub-menu>
-        <a-menu-item>留言板</a-menu-item>
-        <a-menu-item>关于</a-menu-item>
+        <a-menu-item key="message">留言板</a-menu-item>
+        <a-menu-item key="about">关于</a-menu-item>
+        <a-menu-item key="admin" @click="handleClick">后台管理</a-menu-item>
       </a-menu>
     </div>
   </div>
@@ -59,6 +60,9 @@ export default {
         });
       }
     },
+    handleClick(e){
+      console.log(e);
+    }
   },
   computed: {
     catalogue: function () {
