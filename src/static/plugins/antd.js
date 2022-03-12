@@ -7,7 +7,9 @@ import {
   MenuItem,
   Cascader,
   Avatar,
-  Tabs
+  Tabs,
+  Form,
+  Input
 } from 'ant-design-vue'
 
 export {
@@ -27,5 +29,7 @@ const Elements = {
   MenuItem,
   Cascader,
   Avatar,
-  Tabs
+  Tabs,
+  Form,
+  Input
 }

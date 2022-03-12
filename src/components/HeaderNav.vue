@@ -1,15 +1,13 @@
 <template>
   <div class="top-nav">
     <div class="menu-wrapper">
-      <a-menu mode="horizontal" theme="dark">
+      <a-menu v-model:selectedKeys="current" mode="horizontal" theme="dark">
         <a-menu-item key="index">首页</a-menu-item>
         <a-sub-menu>
           <template #title>分类</template>
           <template v-for="item in catalogue.children" :key="item.name">
             <template v-if="!item.children || item.children.length === 0">
-              <a-menu-item :key="item.name">
-                {{ item.name }}
-              </a-menu-item>
+              <a-menu-item :key="item.name">{{ item.name }}</a-menu-item>
             </template>
             <template v-else>
               <sub-menu :menu-info="item" :key="item.name" />
@@ -18,7 +16,7 @@
         </a-sub-menu>
         <a-menu-item key="message">留言板</a-menu-item>
         <a-menu-item key="about">关于</a-menu-item>
-        <a-menu-item key="admin" @click="handleClickAdmin">后台管理</a-menu-item>
+        <a-menu-item key="admin">后台管理</a-menu-item>
       </a-menu>
     </div>
   </div>
@@ -35,6 +33,10 @@ import {
 } from "@ant-design/icons-vue";
 export default {
   name: "HeaderNav",
+  props: {
+    current: Object
+  },
+  emits: ['handleChangeMenu'],
   components: {
     "sub-menu": SubMenu,
     MailOutlined,
@@ -42,12 +44,16 @@ export default {
     SettingOutlined,
   },
 
-  setup() {
+  setup(props, emits) {
     const noteTree = computed(() => store.state.catalogueTree);
-    const current = ref(["mail"]);
+    const current = ref(props.current || ['index']);
+    watch(current, (newVal, oldValue) => {
+      emits.emit("handleChangeMenu", current.value[0]);
+    });
     return { noteTree, current };
   },
-  mounted(){
+
+  mounted() {
     console.log(this.noteTree);
   },
   methods: {
@@ -60,9 +66,6 @@ export default {
         });
       }
     },
-    handleClickAdmin(e){
-      console.log(e);
-    }
   },
   computed: {
     catalogue: function () {

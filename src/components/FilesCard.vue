@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="text">
-      <p>{{ text }}{{ text }}{{ text }}{{ text }}{{ text }}{{ text }}{{ text }}{{ text }}{{ text }}{{ text }}{{ text }}{{ text }}</p>
+      <p>{{ text }}</p>
     </div>
     <!-- <div class="divider"></div> -->
     <div class="footer">
@@ -49,7 +49,6 @@ export default {
     }
   },
   setup(){
-
     return {
 
     }

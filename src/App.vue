@@ -1,31 +1,28 @@
 <template>
-  <Header :avatar="userMsg.avatar_url" :bio="userMsg.bio" />
-  <a-tabs v-model:activeKey="activeKey">
-    <a-tab-pane key="1" tab="Tab 1">Content of Tab Pane 1</a-tab-pane>
-    <a-tab-pane key="2" tab="Tab 2" force-render
-      >Content of Tab Pane 2</a-tab-pane
-    >
-    <a-tab-pane key="3" tab="Tab 3">Content of Tab Pane 3</a-tab-pane>
-    <template #renderTabBar=""></template>
-  </a-tabs>
-  <!-- {{ userMsg }} -->
-  <div class="bottom">
-    <div class="content">
-      <files-card title="Vue首屏加载速度优化，提升80%以上" :text="text">
-        <template #top-action>
-          <a-button>Click Me</a-button>
-          <a-button>Test Button</a-button>
-        </template>
-        <template #footer>
-          <a-button type="primary">Hello</a-button>
-        </template>
-      </files-card>
-    </div>
-    <div class="side-nav">
-      <a-button type="primary">Hello</a-button>
-    </div>
+  <Header
+    :avatar="userMsg.avatar_url"
+    :bio="userMsg.bio"
+    :current="[activeKey]"
+    @handleChangeMenu="handleChangeMenu"
+  />
+  <div class="content">
+    <a-tabs v-model:activeKey="activeKey">
+      <a-tab-pane key="index" tab="index">
+        <Index />
+      </a-tab-pane>
+      <a-tab-pane key="category" tab="category">分类</a-tab-pane>
+      <a-tab-pane key="message" tab="message">留言板</a-tab-pane>
+      <a-tab-pane key="about" tab="about">关于</a-tab-pane>
+      <a-tab-pane key="admin" tab="about">
+        <Admin />
+      </a-tab-pane>
+      <template #renderTabBar></template>
+    </a-tabs>
   </div>
+  <div class="bottom">bottom</div>
 </template>
+
+
 
 <script>
 import { github_config } from "./hooks/config.js";
@@ -34,12 +31,16 @@ import note from "@utils/note";
 import { reactive, provide, ref, computed } from "vue";
 import store from "./store/index";
 import FilesCard from "@components/FilesCard.vue";
-
+import HelloWorld from "@components/HelloWorld.vue";
+import Index from "@views/index.vue";
+import Admin from "@views/admin.vue";
 export default {
   name: "App",
   components: {
     Header,
     FilesCard,
+    Index,
+    Admin
   },
   setup() {
     Object.keys(github_config).forEach((key) => {
@@ -53,7 +54,7 @@ export default {
     // provide("noteTree", noteTree);
     return reactive({
       // noteTree,
-      activeKey: ref("1"),
+      activeKey: ref("index"),
       userMsg,
       text,
     });
@@ -73,6 +74,11 @@ export default {
         });
       }
     },
+    handleChangeMenu(menu) {
+      if (['index', 'message', 'about', 'admin'].indexOf(menu) == -1)
+        menu = 'category'
+      this.activeKey = menu;
+    }
   },
 };
 </script>
@@ -84,6 +90,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0;
 }
@@ -95,27 +102,17 @@ html {
   // background: linear-gradient(45deg, #845EC2, #00c9b7);
   // background-image: linear-gradient(to right bottom, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
 }
-
+.content {
+  // border: 1px solid red;
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 50px;
+  flex-grow: 1;
+}
 .bottom {
   border: 1px solid red;
   width: 80%;
   margin: 0 auto;
   margin-top: 50px;
-  display: flex;
-
-  .content {
-    height: 100%;
-    border: 1px solid red;
-    width: 70%;
-    display: flex;
-    justify-content: center;
-  }
-  .side-nav {
-    border: 2px solid green;
-    width: 30%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
 }
 </style>
