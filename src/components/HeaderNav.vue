@@ -3,8 +3,16 @@
     <div class="menu-wrapper">
       <a-menu v-model:selectedKeys="current" mode="horizontal" theme="dark">
         <a-menu-item key="index">首页</a-menu-item>
-        <a-sub-menu>
-          <template #title>分类</template>
+        <a-sub-menu
+          @click="handleLastCategory"
+          :style="
+            ['index', 'message', 'about', 'admin'].indexOf(current[0]) ==
+            -1
+              ? { backgroundColor: '#1890ff' }
+              : null
+          "
+        >
+          <template #title> 分类 </template>
           <template v-for="item in catalogue.children" :key="item.name">
             <template v-if="!item.children || item.children.length === 0">
               <a-menu-item :key="item.name">{{ item.name }}</a-menu-item>
@@ -24,7 +32,7 @@
 
 <script>
 import { inject, reactive, watch, ref, computed } from "vue";
-import store from "../store/index";
+import store from "@store/index";
 import SubMenu from "./SubMenu.vue";
 import {
   MailOutlined,
@@ -34,9 +42,9 @@ import {
 export default {
   name: "HeaderNav",
   props: {
-    current: Object
+    current: Object,
   },
-  emits: ['handleChangeMenu'],
+  emits: ["handleChangeMenu"],
   components: {
     "sub-menu": SubMenu,
     MailOutlined,
@@ -46,16 +54,33 @@ export default {
 
   setup(props, emits) {
     const noteTree = computed(() => store.state.catalogueTree);
-    const current = ref(props.current || ['index']);
+    const current = ref(props.current || ["index"]);
+    const lastCategory = ref([]);
     watch(current, (newVal, oldValue) => {
+      if (
+        ["index", "message", "about", "admin"].indexOf(current.value[0]) == -1
+      )
+        lastCategory.value = current.value;
       emits.emit("handleChangeMenu", current.value[0]);
     });
-    return { noteTree, current };
+    watch(noteTree, (newVal, oldValue) => {
+      if (current.value?.length && current.value[0] === "category") {
+        handleLastCategory();
+      }
+    });
+    const handleLastCategory = () => {
+      if (!lastCategory.value.length && noteTree.value?.children?.length) {
+        console.log(noteTree.value);
+        lastCategory.value = [noteTree.value?.catalogue_map[noteTree.value?.children[0].name]];
+      }
+      if (lastCategory.value.length) {
+        current.value = lastCategory.value;
+      }
+    };
+    return { noteTree, current, lastCategory, handleLastCategory };
   },
 
-  mounted() {
-    console.log(this.noteTree);
-  },
+  mounted() {},
   methods: {
     dfs(item, map) {
       if (!item || !map) return;
@@ -71,7 +96,7 @@ export default {
     catalogue: function () {
       const obj = JSON.parse(JSON.stringify(this.noteTree));
       this.dfs(obj, this.noteTree.catalogue_map);
-      console.log(this.noteTree);
+      // console.log(this.noteTree);
       return obj;
     },
   },
@@ -102,5 +127,8 @@ export default {
       color: unset !important;
     }
   }
+}
+.aa {
+  background-color: red;
 }
 </style>

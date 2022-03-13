@@ -135,10 +135,18 @@ export default {
             },
           });
         } else {
-          console.log(res);
+          // console.log(res);
           callback(res);
         }
       }
     );
   },
+  async getUserInfo(callback) {
+    if (!callback) {
+      let ret;
+      await github.getUserInfo(res => ret = res);
+      return ret;
+    }
+    github.getUserInfo(callback);
+  }
 };

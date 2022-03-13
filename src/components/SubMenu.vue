@@ -1,6 +1,10 @@
 <template>
   <a-sub-menu :key="menuInfo.name">
-    <template #title>{{ menuInfo.name }}</template>
+    <template #title>
+      <a-menu-item :key="menuInfo.name">
+        {{ menuInfo.name }}
+      </a-menu-item>
+    </template>
     <template v-for="item in menuInfo.children" :key="item.name">
       <template v-if="!item.children || item.children.length === 0">
         <a-menu-item :key="item.name">

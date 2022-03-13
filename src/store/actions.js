@@ -3,7 +3,7 @@ import note from "@utils/note";
 import { github_config } from "../hooks/config.js";
 
 const getUserInfo = ({ state, commit}) => {
-    github.getUser(github_config.login, (res) => {
+    github.getUserByName(github_config.login, (res) => {
         commit('setUserInfo', res.data)
     })
 }

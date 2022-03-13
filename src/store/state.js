@@ -1,7 +1,7 @@
 const state = {
     userConfig: {},
     catalogueTree: {},
-    filesTree:{}
+    filesTree:{},
 }
 
 export default state

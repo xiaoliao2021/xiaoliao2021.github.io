@@ -9,7 +9,10 @@ import {
   Avatar,
   Tabs,
   Form,
-  Input
+  Input,
+  message,
+  Breadcrumb,
+  Card,
 } from 'ant-design-vue'
 
 export {
@@ -31,5 +34,8 @@ const Elements = {
   Avatar,
   Tabs,
   Form,
-  Input
+  Input,
+  message,
+  Breadcrumb,
+  Card,
 }

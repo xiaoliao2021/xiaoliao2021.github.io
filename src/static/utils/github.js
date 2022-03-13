@@ -4,7 +4,7 @@ import { createTokenAuth } from "@octokit/auth-token";
 const octokit_ = new Octokit();
 let token_ = "";
 
-async function getUser_(userName) {
+async function getUserByName_(userName) {
   /**
    * @see https://docs.github.com/cn/rest/reference/users#get-a-user
    */
@@ -29,7 +29,28 @@ async function getUser_(userName) {
   }
   return response_data;
 }
+async function getUserInfo_() {
+  /**
+    * @see https://docs.github.com/cn/rest/reference/users#get-the-authenticated-user
+    */
+  let response_data = { code: 401, data: "Unauthorized" };
+  try {
+    const response = await octokit_.request("GET /user", {});
+    response_data.code = response.status;
+    response_data.data = response.data;
+  } catch (error) {
+    const errorStr = error.toString();
+    if (errorStr.toString().indexOf("Not Found") != -1) {
+      response_data.code = 404;
+      response_data.data = "Not Found";
+    } else {
+      response_data.code = 405;
+      response_data.data = "error network";
+    }
+  }
 
+  return response_data;
+}
 async function getRepo_(login, repo, branch) {
   /**
    * @see https://docs.github.com/cn/rest/reference/repos#get-repository-content
@@ -144,10 +165,12 @@ export default {
     octokit_.auth = auth;
   },
 
-  async getUser(userName, callback) {
-    return callback(await getUser_(userName));
+  async getUserByName(userName, callback) {
+    return callback(await getUserByName_(userName));
   },
-
+  async getUserInfo(callback) {
+    return callback(await getUserInfo_());
+  },
   async getRepo(login, repo, branch, callback) {
     return callback(await getRepo_(login, repo, branch));
   },
