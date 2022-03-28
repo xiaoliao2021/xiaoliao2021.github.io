@@ -7,10 +7,12 @@
   />
   <div class="content">
     <a-tabs v-model:activeKey="activeKey">
-      <a-tab-pane key="index" tab="index"><Index /> </a-tab-pane>
-      <a-tab-pane key="category" tab="category"
-        ><Category :currentCategory="currentCategory"
-      /></a-tab-pane>
+      <a-tab-pane key="index" tab="index">
+        <Index />
+      </a-tab-pane>
+      <a-tab-pane key="category" tab="category">
+        <Category :currentCategory="currentCategory" />
+      </a-tab-pane>
       <a-tab-pane key="message" tab="message">留言板</a-tab-pane>
       <a-tab-pane key="about" tab="about">关于</a-tab-pane>
       <a-tab-pane key="admin" tab="about"><Admin /> </a-tab-pane>
@@ -76,7 +78,7 @@ export default {
     },
     handleChangeMenu(menu) {
       if (["index", "message", "about", "admin"].indexOf(menu) == -1) {
-        this.currentCategory = menu
+        this.currentCategory = menu;
         menu = "category";
       }
       this.activeKey = menu;

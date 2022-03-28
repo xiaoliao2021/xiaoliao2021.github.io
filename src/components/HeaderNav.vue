@@ -6,8 +6,7 @@
         <a-sub-menu
           @click="handleLastCategory"
           :style="
-            ['index', 'message', 'about', 'admin'].indexOf(current[0]) ==
-            -1
+            ['index', 'message', 'about', 'admin'].indexOf(current[0]) == -1
               ? { backgroundColor: '#1890ff' }
               : null
           "
@@ -54,6 +53,7 @@ export default {
 
   setup(props, emits) {
     const noteTree = computed(() => store.state.catalogueTree);
+    // const current = computed(() => props.current || ["index"]); // ref(props.current || ["index"]);
     const current = ref(props.current || ["index"]);
     const lastCategory = ref([]);
     watch(current, (newVal, oldValue) => {
@@ -71,7 +71,9 @@ export default {
     const handleLastCategory = () => {
       if (!lastCategory.value.length && noteTree.value?.children?.length) {
         console.log(noteTree.value);
-        lastCategory.value = [noteTree.value?.catalogue_map[noteTree.value?.children[0].name]];
+        lastCategory.value = [
+          noteTree.value?.catalogue_map[noteTree.value?.children[0].name],
+        ];
       }
       if (lastCategory.value.length) {
         current.value = lastCategory.value;

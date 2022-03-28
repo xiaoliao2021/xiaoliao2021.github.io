@@ -31,6 +31,7 @@
   </template>
   <template v-else>
     {{ userMsg.token }}
+    
   </template>
 </template>
 
@@ -80,7 +81,6 @@ export default {
     const handleFinishFailed = (errors) => {
       console.log(errors);
     };
-
     return {
       userMsg,
       formState,

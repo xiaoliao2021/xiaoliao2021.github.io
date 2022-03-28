@@ -1,25 +1,25 @@
 
 <template>
-  {{ currentCategory }}
   <a-card hoverable style="width: auto">
     <template #cover>
       <a-breadcrumb>
-        <a-breadcrumb-item>分类</a-breadcrumb-item>
-        <a-breadcrumb-item>
-          Linux
-          <template #overlay>
-            <a-menu>
-              <a-menu-item> Linux </a-menu-item>
-              <a-menu-item> Android </a-menu-item>
-              <a-menu-item> 编程 </a-menu-item>
-            </a-menu>
-          </template>
-        </a-breadcrumb-item>
-        <a-breadcrumb-item>Button</a-breadcrumb-item>
+        <template v-for="item in breadcrumbData" :key="item.name">
+          <a-breadcrumb-item @click="currentCategory = item.label">
+            {{ item.label }}
+          </a-breadcrumb-item>
+        </template>
       </a-breadcrumb>
     </template>
     <a-card-meta title="">
-      <template #description>www.instagram.com</template>
+      <template #description
+        ><a-button v-for="item in children" :key="item.name" type="primary" @click="currentCategory = item.name"
+          >{{
+            catalogue_map[item["name"]]
+              ? catalogue_map[item["name"]]
+              : item["name"]
+          }}
+        </a-button>
+      </template>
     </a-card-meta>
   </a-card>
 </template>
@@ -39,11 +39,31 @@ export default {
   },
   setup(props, emits) {
     const noteTree = computed(() => store.state.catalogueTree);
-    console.log(noteTree.value);
+    const children = ref([]);
+    const catalogue_map = noteTree.value.catalogue_map;
     const breadcrumbData = computed(() => {
-      
+      const stack = [noteTree.value];
+      while (stack.length) {
+        const pop = stack.pop();
+        if (
+          pop["name"] === props["currentCategory"] ||
+          catalogue_map[pop["name"]] === props["currentCategory"]
+        ) {
+          children.value = pop.children;
+          return pop.path.split("/").map((item) => {
+            return {
+              label: catalogue_map[item] ? catalogue_map[item] : item,
+              name: item,
+            };
+          });
+        }
+        pop.children.forEach((element) => {
+          stack.push(element);
+        });
+      }
+      return [{ label: "分类" }];
     });
-    return { noteTree, breadcrumbData };
+    return { noteTree, breadcrumbData, children, catalogue_map };
   },
   computed: {
     catalogue: function () {

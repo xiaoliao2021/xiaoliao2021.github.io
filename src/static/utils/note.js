@@ -148,5 +148,5 @@ export default {
       return ret;
     }
     github.getUserInfo(callback);
-  }
+  },
 };
