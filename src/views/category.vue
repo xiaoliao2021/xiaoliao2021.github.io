@@ -19,7 +19,6 @@
               : item["name"]
           }}
         </a-button>
-        www.baidu.com
       </template>
     </a-card-meta>
   </a-card>
