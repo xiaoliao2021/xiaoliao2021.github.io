@@ -13,17 +13,9 @@ import {
   message,
   Breadcrumb,
   Card,
+  Tag,
+  List,
 } from 'ant-design-vue'
-
-export {
-  install
-}
-
-const install = function(app) {
-  for (const i in Elements){
-    app.use(Elements[i])
-  }
-}
 
 const Elements = {
   Button,
@@ -38,4 +30,16 @@ const Elements = {
   message,
   Breadcrumb,
   Card,
+  Tag,
+  List,
+}
+
+const install = function(app) {
+  for (const i in Elements){
+    app.use(Elements[i])
+  }
+}
+
+export {
+  install
 }

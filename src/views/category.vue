@@ -11,14 +11,39 @@
       </a-breadcrumb>
     </template>
     <a-card-meta title="">
-      <template #description
-        ><a-button v-for="item in children" :key="item.name" type="primary" @click="currentCategory = item.name"
-          >{{
+      <template #description>
+        <a-tag
+          color="#2db7f5"
+          v-for="item in children"
+          :key="item.name"
+          @click="currentCategory = item.name"
+        >
+          {{
             catalogue_map[item["name"]]
               ? catalogue_map[item["name"]]
               : item["name"]
-          }}
-        </a-button>
+          }}</a-tag
+        >
+        <a-list item-layout="horizontal" :data-source="listData">
+          <template #renderItem="{ item }">
+            <a-list-item>
+              <a-list-item-meta
+                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+              >
+                <template #title>
+                  <a href="https://www.antdv.com/">{{
+                    item.name.substring(0, item.name.indexOf("."))
+                  }}</a>
+                </template>
+                <template #avatar>
+                  <a-avatar
+                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                  />
+                </template>
+              </a-list-item-meta>
+            </a-list-item>
+          </template>
+        </a-list>
       </template>
     </a-card-meta>
   </a-card>
@@ -39,7 +64,9 @@ export default {
   },
   setup(props, emits) {
     const noteTree = computed(() => store.state.catalogueTree);
-    const children = ref([]);
+    const filesTree = computed(() => store.state.filesTree);
+    console.log(filesTree);
+    const children = ref(null);
     const catalogue_map = noteTree.value.catalogue_map;
     const breadcrumbData = computed(() => {
       const stack = [noteTree.value];
@@ -63,12 +90,54 @@ export default {
       }
       return [{ label: "分类" }];
     });
-    return { noteTree, breadcrumbData, children, catalogue_map };
+    const listData = computed(() => {
+      let stack = [filesTree.value];
+      let find = false;
+      const list = [];
+      while (stack.length) {
+        const pop = stack.pop();
+        if (find && pop.name.indexOf(".") != -1) {
+          list.push(pop);
+        }
+        if (
+          pop["name"] === props["currentCategory"] ||
+          catalogue_map[pop["name"]] === props["currentCategory"]
+        ) {
+          find = true;
+          stack = [];
+        }
+        pop?.children?.forEach((element) => {
+          stack.push(element);
+        });
+      }
+      return list;
+    });
+    const data = [
+      {
+        title: "Ant Design Title 1",
+      },
+      {
+        title: "Ant Design Title 2",
+      },
+      {
+        title: "Ant Design Title 3",
+      },
+      {
+        title: "Ant Design Title 4",
+      },
+    ];
+    return {
+      noteTree,
+      breadcrumbData,
+      children,
+      catalogue_map,
+      data,
+      listData,
+    };
   },
   computed: {
     catalogue: function () {
       const obj = JSON.parse(JSON.stringify(this.noteTree));
-
       return obj;
     },
   },
