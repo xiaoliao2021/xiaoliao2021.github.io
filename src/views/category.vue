@@ -18,7 +18,6 @@
               ? catalogue_map[item["name"]]
               : item["name"]
           }}
-          ai
         </a-button>
       </template>
     </a-card-meta>
