@@ -11,9 +11,12 @@ const setCatalogue = (state, { root_node, root_catalogue, catalogue_map }) => {
     if (root_catalogue) state.catalogueTree = { ...state.catalogueTree, ...root_catalogue }
     if (catalogue_map) state.catalogueTree.catalogue_map = catalogue_map;
 }
-
+const setFileContent = (state, { sha, content }) => {
+    if (sha) state.fileContentMap[sha] = content;
+}
 export default {
     setUserInfo,
     setCatalogue,
     setUserToken,
+    setFileContent,
 }
