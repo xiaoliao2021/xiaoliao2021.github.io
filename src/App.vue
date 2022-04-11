@@ -88,6 +88,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "static/styles/common.scss";
 #app,
 body,
 html {
@@ -97,6 +98,8 @@ html {
   min-height: 100%;
   margin: 0;
   padding: 0;
+  overflow-y: overlay;
+  @include scrollbar-like
 }
 
 #app {
