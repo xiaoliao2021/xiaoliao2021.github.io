@@ -1,6 +1,6 @@
 # linux常用命令
 
-### 获取运行脚本所在路径
+## 获取运行脚本所在路径
 
 使用`$(dirname $(readlink -f "$0")`
 
@@ -13,7 +13,9 @@ CURRENT_DIR=$(dirname $(readlink -f "$0"))
 #`pwd`获取到的是控制台当前路径
 ```
 
-### kill程序
+
+
+## kill程序
 
 使用`kill [-s <信息名称或编号>][程序]　或　kill [-l <信息编号>]`
 
@@ -40,7 +42,9 @@ CURRENT_DIR=$(dirname $(readlink -f "$0"))
 kill -9 100
 ```
 
-### 查看端口占用
+
+
+## 查看端口占用
 
 使用`lsof -i :端口号`
 
@@ -50,7 +54,11 @@ kill -9 100
 lsof -i :8888
 ```
 
-### 定时任务
+
+
+## 定时任务
+
+crontab
 
 每五分钟执行 */5 * * * *
 
@@ -66,29 +74,62 @@ lsof -i :8888
 
 在线工具https://tool.lu/crontab/
 
-#### 查看任务
+### 查看任务
 
 ```shell
 crontab -l
 ```
 
 
-#### 编辑任务
+### 编辑任务
 
 ```shell
 crontab -e
 ```
 
-#### 删除任务
+### 删除任务
 
 ```shell
 crontab -r
 ```
 
 
-### 修改时区
+## 修改时区
 
 ```shell
 timedatectl set-timezone Asia/Shanghai
 ```
 
+
+
+## 设置虚拟交换内存
+
+使用 dd 命令创建交换文件
+
+```shell
+dd if=/dev/zero of=/var/swap bs=1024 count=2048000
+```
+
+### 设置交换文件
+
+```shell
+mkswap /var/swap
+swapon /var/swap
+```
+
+### 修改/etc/fstab文件
+
+```shell
+nano /etc/fstab
+# 最后加入以下内容
+/var/swap swap                    swap    defaults        0 0
+```
+
+### 其他操作
+
+```shell
+# 停止swap分区
+swapoff /var/swap
+# 删除swap文件，需要先停止swap分区
+rm -rf /var/swap
+```
